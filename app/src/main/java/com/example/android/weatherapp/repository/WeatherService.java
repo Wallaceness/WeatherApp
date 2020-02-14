@@ -1,4 +1,4 @@
-package com.example.android.weatherapp.viewmodel;
+package com.example.android.weatherapp.repository;
 
 import com.example.android.weatherapp.model.Response;
 
@@ -7,9 +7,9 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-public interface WeatherApi {
+public interface WeatherService {
 
-    @GET("/")
+    @GET(APIKey.key)
     Observable<Response> fetchWeather(
             @Path("location") String Path,
             @Query("exclude") String exclude,
@@ -18,7 +18,7 @@ public interface WeatherApi {
             @Query("lang") String language
     );
 
-    @GET("/")
+    @GET(APIKey.key)
     Observable<Response> fetchPastWeather(
             @Path("time") String when,
             @Path("location") String Path,
