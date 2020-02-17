@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.android.weatherapp.model.Response;
+import com.example.android.weatherapp.repository.APIKey;
 import com.example.android.weatherapp.repository.Repository;
 
 import io.reactivex.Observable;
@@ -28,7 +29,7 @@ public class WeatherViewModel extends AndroidViewModel {
     public Repository mainRepo = Repository.INSTANCE;
 
     public void fetchWeather(String location){
-        mainRepo.service.fetchWeather(location, "", "", "", "")
+        mainRepo.service.fetchWeather(APIKey.key, location, "", "", "", "")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Response>() {

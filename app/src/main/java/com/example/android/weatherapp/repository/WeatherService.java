@@ -9,8 +9,9 @@ import retrofit2.http.Query;
 
 public interface WeatherService {
 
-    @GET(APIKey.key)
+    @GET("{key}/{location}")
     Observable<Response> fetchWeather(
+            @Path("key") String key,
             @Path("location") String Path,
             @Query("exclude") String exclude,
             @Query("extend") String extend,
@@ -18,8 +19,9 @@ public interface WeatherService {
             @Query("lang") String language
     );
 
-    @GET(APIKey.key)
+    @GET("{key}/{location},{time}")
     Observable<Response> fetchPastWeather(
+            @Path("key") String key,
             @Path("time") String when,
             @Path("location") String Path,
             @Query("exclude") String exclude,

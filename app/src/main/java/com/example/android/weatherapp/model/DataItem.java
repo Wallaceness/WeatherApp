@@ -5,27 +5,27 @@ import com.google.gson.annotations.SerializedName;
 public class DataItem{
 
 	@SerializedName("precipProbability")
-	private int precipProbability;
+	private double precipProbability;
 
 	@SerializedName("precipIntensity")
-	private int precipIntensity;
+	private double precipIntensity;
 
 	@SerializedName("time")
 	private int time;
 
-	public void setPrecipProbability(int precipProbability){
+	public void setPrecipProbability(double precipProbability){
 		this.precipProbability = precipProbability;
 	}
 
-	public int getPrecipProbability(){
+	public double getPrecipProbability(){
 		return precipProbability;
 	}
 
-	public void setPrecipIntensity(int precipIntensity){
+	public void setPrecipIntensity(double precipIntensity){
 		this.precipIntensity = precipIntensity;
 	}
 
-	public int getPrecipIntensity(){
+	public double getPrecipIntensity(){
 		return precipIntensity;
 	}
 
