@@ -3,6 +3,7 @@ package com.example.android.weatherapp.view;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -10,24 +11,28 @@ import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.view.menu.MenuView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 
+import android.os.Handler;
+import android.os.ResultReceiver;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.PermissionRequest;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.example.android.weatherapp.Constants;
+import com.example.android.weatherapp.FetchAddressIntentService;
 import com.example.android.weatherapp.R;
 import com.example.android.weatherapp.model.Currently;
 import com.example.android.weatherapp.model.Daily;
-import com.example.android.weatherapp.model.DataItem;
 import com.example.android.weatherapp.model.Hourly;
 import com.example.android.weatherapp.model.Minutely;
-import com.example.android.weatherapp.model.Response;
 import com.example.android.weatherapp.viewmodel.WeatherViewModel;
+import com.google.android.material.tabs.TabLayout;
 
 import java.security.Permission;
 import java.util.List;
@@ -44,11 +49,18 @@ public class HomeFragment extends Fragment {
     private Daily daily;
     private LocationManager locManager;
     private int REQUEST_LOCATION=1;
+    private TabLayout tabView;
+    private static final String TAG = "HomeFragment";
+    private FragmentManager manager;
+    private Location loc;
+    private CurrentFragment currentView;
+    private AddressResultReceiver resultReceiver;
+    private String addressOutput;
+
 
     public HomeFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,6 +69,50 @@ public class HomeFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
         vm = new WeatherViewModel(getActivity().getApplication());
         locManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        manager = getChildFragmentManager();
+        currentView = new CurrentFragment(currently);
+        resultReceiver= new AddressResultReceiver(new Handler());
+
+        tabView = rootView.findViewById(R.id.tabContainer);
+        tabView.addTab(tabView.newTab().setText("Currently"));
+        tabView.addTab(tabView.newTab().setText("Minutely"));
+        tabView.addTab(tabView.newTab().setText("Hourly"));
+        tabView.addTab(tabView.newTab().setText("Daily"));
+        tabView.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                Log.d(TAG, "onTabSelected: "+tab);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        manager.beginTransaction().add(R.id.fragContainer, currentView).addToBackStack(null).commit();
+
+        //set up your observers here.
+        vm.getWeather().observe(getViewLifecycleOwner(), response -> {
+            hourly = response.getHourly();
+            minutely = response.getMinutely();
+            currently = response.getCurrently();
+            daily = response.getDaily();
+            currentView.setCurrentWeather(currently);
+        });
+
+        vm.getErrors().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();
+            }
+        });
+
         if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             getActivity().requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
             // TODO: Consider calling
@@ -69,25 +125,17 @@ public class HomeFragment extends Fragment {
         }
         else {
             locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 900000, 1000, mLocationListener);
+            loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            startIntentService();
+//            updateUI();
+
+            vm.fetchWeather(Double.toString(loc.getLatitude())+","+Double.toString(loc.getLongitude()));
         }
 
-
-        vm.getWeather().observe(getViewLifecycleOwner(), response -> {
-            hourly = response.getHourly();
-            minutely = response.getMinutely();
-            currently = response.getCurrently();
-            daily = response.getDaily();
-        });
-
-        vm.getErrors().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();
-            }
-        });
         return rootView;
 
     }
+
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(final Location location) {
@@ -122,4 +170,41 @@ public class HomeFragment extends Fragment {
             }
         }
     }
+
+    protected void startIntentService() {
+        Intent intent = new Intent(getActivity(), FetchAddressIntentService.class);
+        intent.putExtra(Constants.RECEIVER, resultReceiver);
+        intent.putExtra(Constants.LOCATION_DATA_EXTRA, loc);
+        getActivity().startService(intent);
+    }
+
+    class AddressResultReceiver extends ResultReceiver {
+        public AddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+
+            if (resultData == null) {
+                return;
+            }
+
+            // Display the address string
+            // or an error message sent from the intent service.
+            addressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
+            if (addressOutput == null) {
+                addressOutput = "";
+            }
+//            displayAddressOutput();
+
+            // Show a toast message if an address was found.
+            if (resultCode == Constants.SUCCESS_RESULT) {
+                Toast.makeText(requireContext(), getString(R.string.address_found), Toast.LENGTH_SHORT);
+            }
+
+        }
+    }
+
+
 }

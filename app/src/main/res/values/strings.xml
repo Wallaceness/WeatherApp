@@ -3,4 +3,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="invalid_lat_long_used">Invalid lattitude and longitude.</string>
+    <string name="service_not_available">Service Unavailable.</string>
+    <string name="no_address_found">No address found.</string>
+    <string name="address_found">Address found!</string>
 </resources>
