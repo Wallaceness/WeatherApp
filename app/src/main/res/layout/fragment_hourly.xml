@@ -5,16 +5,17 @@
         <variable name="hourlyforecast"
             type="com.example.android.weatherapp.model.Hourly" />
     </data>
-<FrameLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.HourlyFragment">
+    tools:context=".view.HourlyFragment"
+    android:focusable="true"
+    android:clickable="true">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@{hourlyforecast.summary}" />
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -8,7 +8,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".view.CurrentFragment">
+        tools:context=".view.CurrentFragment"
+        android:focusable="true"
+        android:clickable="true">
 
         <TextView
             android:layout_width="match_parent"

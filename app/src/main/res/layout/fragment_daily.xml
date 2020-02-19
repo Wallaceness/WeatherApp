@@ -6,16 +6,17 @@
             name="dailyWeather"
             type="com.example.android.weatherapp.model.Daily" />
     </data>
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".view.DailyFragment">
+        tools:context=".view.DailyFragment"
+        android:focusable="true"
+        android:clickable="true">
 
-        <!-- TODO: Update blank fragment layout -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@{dailyWeather.summary}" />
 
-    </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

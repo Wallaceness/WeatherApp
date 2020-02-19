@@ -21,7 +21,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.weatherapp.Constants;
@@ -54,8 +54,12 @@ public class HomeFragment extends Fragment {
     private FragmentManager manager;
     private Location loc;
     private CurrentFragment currentView;
+    private HourlyFragment hourlyView;
+    private DailyFragment dailyView;
     private AddressResultReceiver resultReceiver;
     private String addressOutput;
+    private TextView locationView;
+    private Fragment currentFragment;
 
 
     public HomeFragment() {
@@ -71,17 +75,37 @@ public class HomeFragment extends Fragment {
         locManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         manager = getChildFragmentManager();
         currentView = new CurrentFragment(currently);
+        hourlyView = new HourlyFragment(hourly);
+        dailyView = new DailyFragment(daily);
+
         resultReceiver= new AddressResultReceiver(new Handler());
+        locationView = rootView.findViewById(R.id.addressContainer);
 
         tabView = rootView.findViewById(R.id.tabContainer);
         tabView.addTab(tabView.newTab().setText("Currently"));
-        tabView.addTab(tabView.newTab().setText("Minutely"));
+//        tabView.addTab(tabView.newTab().setText("Minutely"));
         tabView.addTab(tabView.newTab().setText("Hourly"));
         tabView.addTab(tabView.newTab().setText("Daily"));
         tabView.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+
                 Log.d(TAG, "onTabSelected: "+tab);
+                switch(tab.getText().toString()){
+                    case "Currently":
+                        manager.beginTransaction().hide(currentFragment).show(currentView).commit();
+                        currentFragment = currentView;
+                        break;
+                    case "Hourly":
+                        manager.beginTransaction().hide(currentFragment).show(hourlyView).commit();
+                        currentFragment = hourlyView;
+                        break;
+                    case "Daily":
+                        manager.beginTransaction().hide(currentFragment).show(dailyView).commit();
+                        currentFragment = dailyView;
+                        break;
+                }
+
             }
 
             @Override
@@ -96,6 +120,9 @@ public class HomeFragment extends Fragment {
         });
 
         manager.beginTransaction().add(R.id.fragContainer, currentView).addToBackStack(null).commit();
+        manager.beginTransaction().add(R.id.fragContainer, hourlyView).hide(hourlyView).commit();
+        manager.beginTransaction().add(R.id.fragContainer, dailyView).hide(dailyView).commit();
+        currentFragment = currentView;
 
         //set up your observers here.
         vm.getWeather().observe(getViewLifecycleOwner(), response -> {
@@ -104,6 +131,8 @@ public class HomeFragment extends Fragment {
             currently = response.getCurrently();
             daily = response.getDaily();
             currentView.setCurrentWeather(currently);
+            hourlyView.setHourlyWeather(hourly);
+            dailyView.setDailyWeather(daily);
         });
 
         vm.getErrors().observe(getViewLifecycleOwner(), new Observer<String>() {
@@ -196,8 +225,7 @@ public class HomeFragment extends Fragment {
             if (addressOutput == null) {
                 addressOutput = "";
             }
-//            displayAddressOutput();
-
+            locationView.setText(addressOutput);
             // Show a toast message if an address was found.
             if (resultCode == Constants.SUCCESS_RESULT) {
                 Toast.makeText(requireContext(), getString(R.string.address_found), Toast.LENGTH_SHORT);

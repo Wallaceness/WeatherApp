@@ -33,8 +33,6 @@ public class CurrentFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         binder = DataBindingUtil.inflate(inflater, R.layout.fragment_current, container, false);
-        binder.setCurrentWeather(currentWeather);
-        binder.executePendingBindings();
         return binder.getRoot();
     }
 
