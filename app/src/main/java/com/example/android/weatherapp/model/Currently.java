@@ -2,6 +2,10 @@ package com.example.android.weatherapp.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class Currently{
 
 	@SerializedName("summary")
@@ -212,6 +216,13 @@ public class Currently{
 	public int getUvIndex(){
 		return uvIndex;
 	}
+
+    public String formatDate(long date){
+        Date da = new Date(date*1000);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, YYYY HH:mm a", Locale.getDefault());
+        String format = dateFormat.format(da);
+        return format;
+    }
 
 	@Override
  	public String toString(){

@@ -14,6 +14,10 @@ import com.example.android.weatherapp.R;
 import com.example.android.weatherapp.databinding.FragmentCurrentBinding;
 import com.example.android.weatherapp.model.Currently;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 
 /**
  * A simple {@link Fragment} subclass.
