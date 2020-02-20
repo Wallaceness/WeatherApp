@@ -8,16 +8,16 @@ public class Currently{
 	private String summary;
 
 	@SerializedName("precipProbability")
-	private int precipProbability;
+	private double precipProbability;
 
 	@SerializedName("visibility")
-	private int visibility;
+	private double visibility;
 
 	@SerializedName("windGust")
 	private double windGust;
 
 	@SerializedName("precipIntensity")
-	private int precipIntensity;
+	private double precipIntensity;
 
 	@SerializedName("icon")
 	private String icon;
@@ -44,7 +44,7 @@ public class Currently{
 	private int nearestStormBearing;
 
 	@SerializedName("nearestStormDistance")
-	private int nearestStormDistance;
+	private double nearestStormDistance;
 
 	@SerializedName("temperature")
 	private double temperature;
@@ -53,7 +53,7 @@ public class Currently{
 	private double humidity;
 
 	@SerializedName("time")
-	private int time;
+	private long time;
 
 	@SerializedName("windSpeed")
 	private double windSpeed;
@@ -69,11 +69,11 @@ public class Currently{
 		return summary;
 	}
 
-	public void setPrecipProbability(int precipProbability){
+	public void setPrecipProbability(double precipProbability){
 		this.precipProbability = precipProbability;
 	}
 
-	public int getPrecipProbability(){
+	public double getPrecipProbability(){
 		return precipProbability;
 	}
 
@@ -81,7 +81,7 @@ public class Currently{
 		this.visibility = visibility;
 	}
 
-	public int getVisibility(){
+	public double getVisibility(){
 		return visibility;
 	}
 
@@ -93,11 +93,11 @@ public class Currently{
 		return windGust;
 	}
 
-	public void setPrecipIntensity(int precipIntensity){
+	public void setPrecipIntensity(double precipIntensity){
 		this.precipIntensity = precipIntensity;
 	}
 
-	public int getPrecipIntensity(){
+	public double getPrecipIntensity(){
 		return precipIntensity;
 	}
 
@@ -169,7 +169,7 @@ public class Currently{
 		this.nearestStormDistance = nearestStormDistance;
 	}
 
-	public int getNearestStormDistance(){
+	public double getNearestStormDistance(){
 		return nearestStormDistance;
 	}
 
@@ -189,11 +189,11 @@ public class Currently{
 		return humidity;
 	}
 
-	public void setTime(int time){
+	public void setTime(long time){
 		this.time = time;
 	}
 
-	public int getTime(){
+	public long getTime(){
 		return time;
 	}
 
@@ -215,8 +215,8 @@ public class Currently{
 
 	@Override
  	public String toString(){
-		return 
-			"Currently{" + 
+		return
+			"Currently{" +
 			"summary = '" + summary + '\'' + 
 			",precipProbability = '" + precipProbability + '\'' + 
 			",visibility = '" + visibility + '\'' + 

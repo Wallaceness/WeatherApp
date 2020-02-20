@@ -82,7 +82,7 @@ public class HomeFragment extends Fragment {
         locationView = rootView.findViewById(R.id.addressContainer);
 
         tabView = rootView.findViewById(R.id.tabContainer);
-        tabView.addTab(tabView.newTab().setText("Currently"));
+        tabView.addTab(tabView.newTab().setText("Now"));
 //        tabView.addTab(tabView.newTab().setText("Minutely"));
         tabView.addTab(tabView.newTab().setText("Hourly"));
         tabView.addTab(tabView.newTab().setText("Daily"));
@@ -92,7 +92,7 @@ public class HomeFragment extends Fragment {
 
                 Log.d(TAG, "onTabSelected: "+tab);
                 switch(tab.getText().toString()){
-                    case "Currently":
+                    case "Now":
                         manager.beginTransaction().hide(currentFragment).show(currentView).commit();
                         currentFragment = currentView;
                         break;
@@ -115,7 +115,20 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
+                switch(tab.getText().toString()){
+                    case "Now":
+                        manager.beginTransaction().hide(currentFragment).show(currentView).commit();
+                        currentFragment = currentView;
+                        break;
+                    case "Hourly":
+                        manager.beginTransaction().hide(currentFragment).show(hourlyView).commit();
+                        currentFragment = hourlyView;
+                        break;
+                    case "Daily":
+                        manager.beginTransaction().hide(currentFragment).show(dailyView).commit();
+                        currentFragment = dailyView;
+                        break;
+                }
             }
         });
 

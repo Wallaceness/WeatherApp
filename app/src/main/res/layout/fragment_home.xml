@@ -11,6 +11,9 @@
         android:id="@+id/addressContainer"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/tabContainer"
+        android:textSize="14pt"
+        android:textStyle="bold"
+        android:gravity="center"
         />
 
     <com.google.android.material.tabs.TabLayout
@@ -18,7 +21,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/tabContainer"
         app:layout_constraintTop_toBottomOf="@id/addressContainer"
-        app:layout_constraintBottom_toTopOf="@id/fragContainer"/>
+        app:layout_constraintBottom_toTopOf="@id/fragContainer" />
 
     <FrameLayout
         android:id="@+id/fragContainer"
