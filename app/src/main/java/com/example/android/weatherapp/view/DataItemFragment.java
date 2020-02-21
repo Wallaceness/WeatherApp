@@ -22,10 +22,12 @@ import com.example.android.weatherapp.model.DataItem;
 public class DataItemFragment extends Fragment {
     private DataItem weatherItem;
     private FragmentDataItemBinding binder;
+    private String type;
 
 
-    public DataItemFragment(DataItem item) {
+    public DataItemFragment(DataItem item, String type) {
         this.weatherItem = item;
+        this.type=type;
     }
 
 
@@ -35,6 +37,7 @@ public class DataItemFragment extends Fragment {
 
         binder = DataBindingUtil.inflate(inflater, R.layout.fragment_data_item, container, false);
         setCurrentWeather(weatherItem);
+        binder.setItemType(type);
         return binder.getRoot();
     }
 

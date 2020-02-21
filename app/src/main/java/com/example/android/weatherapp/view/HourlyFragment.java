@@ -10,6 +10,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.android.weatherapp.R;
 import com.example.android.weatherapp.databinding.FragmentHourlyBinding;
@@ -26,6 +27,8 @@ public class HourlyFragment extends Fragment {
     private ViewPager2 viewPager;
     WeatherDataAdapter pagerAdapter;
     ArrayList<DataItem> weather = new ArrayList<DataItem>();
+    ImageView icon;
+    MainActivity main;
 
     private OnFragmentInteractionListener mListener;
 
@@ -43,9 +46,11 @@ public class HourlyFragment extends Fragment {
         // Inflate the layout for this fragment
         binder = DataBindingUtil.inflate(inflater, R.layout.fragment_hourly, container, false);
         View rootView = binder.getRoot();
-        pagerAdapter = new WeatherDataAdapter(this, weather);
+        pagerAdapter = new WeatherDataAdapter(this, weather, "hourly");
         viewPager = rootView.findViewById(R.id.hourlyPager);
         viewPager.setAdapter(pagerAdapter);
+        icon = rootView.findViewById(R.id.iconHourly);
+        main = (MainActivity) getActivity();
         return rootView;
     }
 
@@ -67,6 +72,7 @@ public class HourlyFragment extends Fragment {
     public void setHourlyWeather(Hourly hours){
         this.hourly = hours;
         binder.setHourlyforecast(hourly);
+        main.renderIcon(hourly.getIcon(), icon);
         pagerAdapter.updateWeather(hourly.getData());
     }
 }

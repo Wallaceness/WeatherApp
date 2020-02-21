@@ -5,6 +5,8 @@
     <data>
         <variable name="currentWeather"
             type="com.example.android.weatherapp.model.DataItem" />
+        <variable name="itemType"
+            type="String" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,7 +22,7 @@
             android:textSize="12pt"
             android:gravity="center"
             android:textStyle="bold"
-            android:text="@{currentWeather.formatDate(currentWeather.time)}"
+            android:text="@{currentWeather.formatDate(currentWeather.time, itemType)}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/currentTemperature"
             android:id="@+id/currentTime"/>

@@ -11,10 +11,12 @@ import java.util.List;
 public class WeatherDataAdapter extends FragmentStateAdapter {
 
     private List<DataItem> weatherList;
+    private String type;
 
-    public WeatherDataAdapter(Fragment fragment, List<DataItem> weather) {
+    public WeatherDataAdapter(Fragment fragment, List<DataItem> weather, String type) {
         super(fragment);
         weatherList = weather;
+        this.type=type;
     }
 
     public void updateWeather(List<DataItem> weatherList){
@@ -25,7 +27,7 @@ public class WeatherDataAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        DataItemFragment dataI = new DataItemFragment(weatherList.get(position));
+        DataItemFragment dataI = new DataItemFragment(weatherList.get(position), type);
         return dataI;
     }
 

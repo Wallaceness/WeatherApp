@@ -9,6 +9,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.android.weatherapp.R;
 import com.example.android.weatherapp.databinding.FragmentDailyBinding;
@@ -26,6 +27,8 @@ public class DailyFragment extends Fragment {
     ViewPager2 pager;
     WeatherDataAdapter pagerAdapter;
     ArrayList<DataItem> weather = new ArrayList<>();
+    MainActivity main;
+    ImageView icon;
 
 
     public DailyFragment() {
@@ -48,7 +51,9 @@ public class DailyFragment extends Fragment {
         binder = DataBindingUtil.inflate(inflater, R.layout.fragment_daily, container, false);
         View rootView= binder.getRoot();
         pager = rootView.findViewById(R.id.dailyPager);
-        pagerAdapter=new WeatherDataAdapter(this, weather);
+        pagerAdapter=new WeatherDataAdapter(this, weather, "daily");
+        main = (MainActivity) getActivity();
+        icon = rootView.findViewById(R.id.iconDaily);
         pager.setAdapter(pagerAdapter);
         return rootView;
     }
@@ -57,6 +62,7 @@ public class DailyFragment extends Fragment {
         this.daily=day;
         binder.setDailyWeather(day);
         weather = (ArrayList<DataItem>)day.getData();
+        main.renderIcon(day.getIcon(), icon);
         pagerAdapter.updateWeather(weather);
 
     }

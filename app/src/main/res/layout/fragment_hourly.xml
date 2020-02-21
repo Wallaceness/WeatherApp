@@ -13,12 +13,24 @@
     android:focusable="true"
     android:clickable="true">
 
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/iconHourly"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/hourlyPager"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/hourlySummary"
+        android:contentDescription="@string/weather_icon" />
+
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:text="@{hourlyforecast.summary}"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/hourlyPager"
+        app:layout_constraintStart_toEndOf="@id/hourlySummary"
+        app:layout_constraintEnd_toEndOf="parent"
         android:id="@+id/hourlySummary"
         />
     <androidx.viewpager2.widget.ViewPager2

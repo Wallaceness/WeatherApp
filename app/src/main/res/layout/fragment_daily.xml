@@ -14,13 +14,25 @@
         android:focusable="true"
         android:clickable="true">
 
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/iconDaily"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/dailyPager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/dailySummary"
+            android:contentDescription="@string/weather_icon" />
+
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             android:text="@{dailyWeather.summary}"
             android:id="@+id/dailySummary"
             app:layout_constraintBottom_toTopOf="@+id/dailyPager"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iconDaily"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/dailyPager"

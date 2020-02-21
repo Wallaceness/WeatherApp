@@ -24,8 +24,17 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/currentSummary"
             android:id="@+id/currentTime"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/iconCurrently"
+            app:layout_constraintTop_toBottomOf="@id/currentTime"
+            app:layout_constraintBottom_toTopOf="@id/currentTemperature"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/currentSummary"
+            android:contentDescription="@string/weather_icon" />
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             android:textSize="12pt"
             android:gravity="center"
@@ -33,6 +42,8 @@
             android:text="@{currentWeather.summary}"
             app:layout_constraintTop_toBottomOf="@id/currentTime"
             app:layout_constraintBottom_toTopOf="@id/currentTemperature"
+            app:layout_constraintStart_toEndOf="@+id/iconCurrently"
+            app:layout_constraintEnd_toEndOf="parent"
             android:id="@+id/currentSummary"/>
         <TextView
             android:layout_width="match_parent"
