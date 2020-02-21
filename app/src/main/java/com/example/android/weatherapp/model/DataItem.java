@@ -7,6 +7,17 @@ import java.util.Date;
 import java.util.Locale;
 
 public class DataItem{
+	@SerializedName("summary")
+	private String summary;
+
+	public String getSummary() {
+		return summary;
+	}
+
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
+
 	@SerializedName("sunriseTime")
 	private long sunriseTime;
 

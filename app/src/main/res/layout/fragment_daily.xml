@@ -15,8 +15,10 @@
         android:clickable="true">
 
         <ImageView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="40dp"
+            android:maxHeight="40dp"
             android:id="@+id/iconDaily"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/dailyPager"
@@ -26,13 +28,16 @@
 
         <TextView
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:text="@{dailyWeather.summary}"
             android:id="@+id/dailySummary"
             app:layout_constraintBottom_toTopOf="@+id/dailyPager"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/iconDaily"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textSize="12pt"/>
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/dailyPager"

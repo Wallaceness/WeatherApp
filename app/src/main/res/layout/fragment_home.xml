@@ -11,7 +11,7 @@
         android:id="@+id/addressContainer"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/tabContainer"
-        android:textSize="14pt"
+        android:textSize="12pt"
         android:textStyle="bold"
         android:gravity="center"
         />

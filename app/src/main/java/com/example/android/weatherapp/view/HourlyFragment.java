@@ -71,7 +71,7 @@ public class HourlyFragment extends Fragment {
 
     public void setHourlyWeather(Hourly hours){
         this.hourly = hours;
-        binder.setHourlyforecast(hourly);
+        binder.setHourlyforecast(hours);
         main.renderIcon(hourly.getIcon(), icon);
         pagerAdapter.updateWeather(hourly.getData());
     }

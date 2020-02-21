@@ -14,22 +14,27 @@
     android:clickable="true">
 
     <ImageView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/iconHourly"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/hourlyPager"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/hourlySummary"
-        android:contentDescription="@string/weather_icon" />
+        android:contentDescription="@string/weather_icon"
+        android:maxHeight="40dp"
+        android:maxWidth="40dp" />
 
     <TextView
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="12pt"
+        android:gravity="center"
+        android:textStyle="bold"
         android:text="@{hourlyforecast.summary}"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/hourlyPager"
-        app:layout_constraintStart_toEndOf="@id/hourlySummary"
+        app:layout_constraintStart_toEndOf="@id/iconHourly"
         app:layout_constraintEnd_toEndOf="parent"
         android:id="@+id/hourlySummary"
         />
