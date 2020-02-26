@@ -140,7 +140,7 @@
             android:layout_height="0dp"
             android:text="@string/uv_index"
             app:layout_constraintTop_toBottomOf="@id/currentHumidity"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/currentPrecipitationLabel"
             app:layout_constraintEnd_toStartOf="@id/currentUVIndex"
             app:layout_constraintStart_toStartOf="parent"
             />
@@ -149,11 +149,32 @@
             android:layout_height="0dp"
             android:id="@+id/currentUVIndex"
             app:layout_constraintTop_toBottomOf="@id/currentHumidity"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/currentPrecipitation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/currentUvIndexLabel"
             android:text="@{Integer.toString(currentWeather.uvIndex)}"
             android:gravity="end"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/currentPrecipitationLabel"
+            android:text="@string/chance_of_precipitation"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/currentUvIndexLabel"
+            app:layout_constraintEnd_toStartOf="@+id/currentPrecipitation"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/currentPrecipitation"
+            android:text="@{Double.toString(currentWeather.precipProbability)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/currentPrecipitationLabel"
+            app:layout_constraintTop_toBottomOf="@id/currentUVIndex"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="end"
+            />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"

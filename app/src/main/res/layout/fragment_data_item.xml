@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
+        <import type="android.view.View"/>
         <variable name="itemWeather"
             type="com.example.android.weatherapp.model.DataItem" />
         <variable name="itemType"
@@ -52,6 +53,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:id="@+id/ItemSummary"
             android:layout_marginBottom="10dp"/>
+<!--Conditional code for hourly view-->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -59,7 +61,7 @@
             app:layout_constraintTop_toBottomOf="@id/ItemSummary"
             app:layout_constraintBottom_toTopOf="@id/itemApparent"
             android:text="@{Double.toString(itemWeather.temperature)}"
-            />
+            android:visibility="@{itemType.equals(`hourly`)? View.VISIBLE: View.INVISIBLE}" />
 
         <TextView
             android:id="@+id/itemApparentLabel"
@@ -69,7 +71,8 @@
             app:layout_constraintBottom_toTopOf="@id/itemWindSpeed"
             app:layout_constraintEnd_toStartOf="@id/itemApparent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/itemTemperature" />
+            app:layout_constraintTop_toBottomOf="@id/itemTemperature"
+            android:visibility="@{itemType.equals(`hourly`)? View.VISIBLE: View.INVISIBLE}" />
         <TextView
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -79,7 +82,51 @@
             app:layout_constraintStart_toEndOf="@id/itemApparentLabel"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@{Double.toString(itemWeather.apparentTemperature)}"
-            android:gravity="end"/>
+            android:gravity="end"
+            android:visibility="@{itemType.equals(`hourly`)? View.VISIBLE: View.INVISIBLE}"/>
+<!--Conditional code for daily view-->
+        <TextView
+            android:id="@+id/itemHighLabel"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="@string/hi"
+            app:layout_constraintBottom_toTopOf="@id/itemLowLabel"
+            app:layout_constraintEnd_toStartOf="@id/itemHigh"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ItemSummary"
+            android:visibility="@{itemType.equals(`daily`)? View.VISIBLE: View.INVISIBLE}" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/itemHigh"
+            app:layout_constraintTop_toBottomOf="@id/ItemSummary"
+            app:layout_constraintBottom_toTopOf="@id/itemLow"
+            app:layout_constraintStart_toEndOf="@id/itemApparentLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@{Double.toString(itemWeather.temperatureHigh)}"
+            android:gravity="end"
+            android:visibility="@{itemType.equals(`daily`)? View.VISIBLE: View.INVISIBLE}"/>
+        <TextView
+            android:id="@+id/itemLowLabel"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="@string/low"
+            app:layout_constraintBottom_toTopOf="@id/itemWindSpeed"
+            app:layout_constraintEnd_toStartOf="@id/itemLow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/itemHighLabel"
+            android:visibility="@{itemType.equals(`daily`)? View.VISIBLE: View.INVISIBLE}" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/itemLow"
+            app:layout_constraintTop_toBottomOf="@id/itemHigh"
+            app:layout_constraintBottom_toTopOf="@id/itemWindSpeed"
+            app:layout_constraintStart_toEndOf="@id/itemLowLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@{Double.toString(itemWeather.temperatureLow)}"
+            android:gravity="end"
+            android:visibility="@{itemType.equals(`daily`)? View.VISIBLE: View.INVISIBLE}"/>
         <TextView
             android:id="@+id/itemwindSpeedLabel"
             android:layout_width="0dp"
@@ -134,7 +181,7 @@
             android:layout_height="0dp"
             android:text="@string/uv_index"
             app:layout_constraintTop_toBottomOf="@id/itemHumidity"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/itemPrecipitationLabel"
             app:layout_constraintEnd_toStartOf="@id/itemUVIndex"
             app:layout_constraintStart_toStartOf="parent"
             />
@@ -143,11 +190,32 @@
             android:layout_height="0dp"
             android:id="@+id/itemUVIndex"
             app:layout_constraintTop_toBottomOf="@id/itemHumidity"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/itemPrecipitation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/itemUvIndexLabel"
             android:text="@{Integer.toString(itemWeather.uvIndex)}"
             android:gravity="end"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/itemPrecipitationLabel"
+            android:text="@string/chance_of_precipitation"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/itemUvIndexLabel"
+            app:layout_constraintEnd_toStartOf="@+id/itemPrecipitation"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/itemPrecipitation"
+            android:text="@{Double.toString(itemWeather.precipProbability)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/itemPrecipitationLabel"
+            app:layout_constraintTop_toBottomOf="@id/itemUVIndex"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="end"
+            />
         <androidx.constraintlayout.widget.Guideline
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
