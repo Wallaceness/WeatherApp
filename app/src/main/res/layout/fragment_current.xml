@@ -12,7 +12,8 @@
         tools:context=".view.CurrentFragment"
         android:focusable="true"
         android:clickable="true"
-        android:padding="5dp">
+        android:paddingEnd="20dp"
+        android:paddingStart="20dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -23,37 +24,45 @@
             android:text="@{currentWeather.formatDate(currentWeather.time)}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/currentSummary"
-            android:id="@+id/currentTime"/>
+            android:id="@+id/currentTime" />
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="false"
             android:maxHeight="40dp"
             android:maxWidth="40dp"
             android:id="@+id/iconCurrently"
             app:layout_constraintTop_toBottomOf="@id/currentTime"
             app:layout_constraintBottom_toTopOf="@id/currentTemperature"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/currentSummary"
-            android:contentDescription="@string/weather_icon" />
+            app:layout_constraintEnd_toStartOf="@id/guideline"
+            android:contentDescription="@string/weather_icon"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center"
+            />
         <TextView
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:textSize="12pt"
             android:gravity="center"
-            android:textStyle="bold"
+            android:textStyle="italic"
             android:text="@{currentWeather.summary}"
             app:layout_constraintTop_toBottomOf="@id/currentTime"
             app:layout_constraintBottom_toTopOf="@id/currentTemperature"
-            app:layout_constraintStart_toEndOf="@+id/iconCurrently"
+            app:layout_constraintStart_toEndOf="@+id/guideline"
             app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/currentSummary"/>
+            android:id="@+id/currentSummary"
+            android:layout_marginBottom="20dp"
+            />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:id="@+id/currentTemperature"
             app:layout_constraintTop_toBottomOf="@id/currentSummary"
             app:layout_constraintBottom_toTopOf="@id/currentApparent"
-            android:text="@{Double.toString(currentWeather.temperature)}"/>
+            android:text="@{Double.toString(currentWeather.temperature)}"
+            />
 
         <TextView
             android:id="@+id/currentApparentLabel"
@@ -63,7 +72,8 @@
             app:layout_constraintBottom_toTopOf="@id/currentWindSpeed"
             app:layout_constraintEnd_toStartOf="@id/currentApparent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/currentTemperature" />
+            app:layout_constraintTop_toBottomOf="@id/currentTemperature"
+            />
         <TextView
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -72,7 +82,8 @@
             app:layout_constraintBottom_toTopOf="@id/currentWindSpeed"
             app:layout_constraintStart_toEndOf="@id/currentApparentLabel"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="@{Double.toString(currentWeather.apparentTemperature)}"/>
+            android:text="@{Double.toString(currentWeather.apparentTemperature)}"
+            android:gravity="end"/>
         <TextView
             android:id="@+id/currentwindSpeedLabel"
             android:layout_width="0dp"
@@ -81,7 +92,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/currentWindSpeed"
             app:layout_constraintTop_toBottomOf="@+id/currentApparentLabel"
-            android:text="@string/wind_speed"/>
+            android:text="@string/wind_speed"
+            />
         <TextView
             android:id="@+id/currentWindSpeed"
             android:layout_width="0dp"
@@ -90,7 +102,8 @@
             app:layout_constraintBottom_toTopOf="@id/currentHumidity"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/currentwindSpeedLabel"
-            app:layout_constraintTop_toBottomOf="@id/currentApparent" />
+            app:layout_constraintTop_toBottomOf="@id/currentApparent"
+            android:gravity="end"/>
         <TextView
             android:id="@+id/textView2"
             android:layout_width="0dp"
@@ -99,7 +112,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/currentWindSpeed"
             app:layout_constraintTop_toBottomOf="@+id/currentApparentLabel"
-            android:text="@string/wind_speed"/>
+            android:text="@string/wind_speed"
+            />
         <TextView
             android:id="@+id/currentHumidityLabel"
             android:layout_width="0dp"
@@ -118,7 +132,8 @@
             app:layout_constraintBottom_toTopOf="@id/currentUVIndex"
             app:layout_constraintStart_toEndOf="@id/currentHumidityLabel"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="@{Double.toString(currentWeather.humidity)}"/>
+            android:text="@{Double.toString(currentWeather.humidity)}"
+            android:gravity="end"/>
         <TextView
             android:id="@+id/currentUvIndexLabel"
             android:layout_width="0dp"
@@ -137,7 +152,15 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/currentUvIndexLabel"
-            android:text="@{Integer.toString(currentWeather.uvIndex)}"/>
+            android:text="@{Integer.toString(currentWeather.uvIndex)}"
+            android:gravity="end"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".4" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

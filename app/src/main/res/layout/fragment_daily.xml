@@ -12,7 +12,9 @@
         android:layout_height="match_parent"
         tools:context=".view.DailyFragment"
         android:focusable="true"
-        android:clickable="true">
+        android:clickable="true"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -23,8 +25,9 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/dailyPager"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/dailySummary"
-            android:contentDescription="@string/weather_icon" />
+            app:layout_constraintEnd_toStartOf="@id/guideda"
+            android:contentDescription="@string/weather_icon"
+            android:layout_marginTop="20dp"/>
 
         <TextView
             android:layout_width="0dp"
@@ -33,11 +36,18 @@
             android:id="@+id/dailySummary"
             app:layout_constraintBottom_toTopOf="@+id/dailyPager"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/iconDaily"
+            app:layout_constraintStart_toEndOf="@id/guideda"
             app:layout_constraintEnd_toEndOf="parent"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:textSize="12pt"/>
+            android:textStyle="italic"
+            android:gravity="center_vertical"
+            android:layout_marginTop="20dp"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintGuide_percent=".4"
+            android:orientation="vertical"
+            android:id="@+id/guideda"/>
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/dailyPager"

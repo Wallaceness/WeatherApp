@@ -11,7 +11,9 @@
     android:layout_height="match_parent"
     tools:context=".view.HourlyFragment"
     android:focusable="true"
-    android:clickable="true">
+    android:clickable="true"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -20,23 +22,24 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/hourlyPager"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/hourlySummary"
+        app:layout_constraintEnd_toStartOf="@id/guideh"
         android:contentDescription="@string/weather_icon"
         android:maxHeight="40dp"
-        android:maxWidth="40dp" />
+        android:maxWidth="40dp"
+        android:layout_marginTop="20dp"/>
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="12pt"
-        android:gravity="center"
-        android:textStyle="bold"
+        android:gravity="center_vertical"
+        android:textStyle="italic"
         android:text="@{hourlyforecast.summary}"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/hourlyPager"
-        app:layout_constraintStart_toEndOf="@id/iconHourly"
+        app:layout_constraintStart_toEndOf="@id/guideh"
         app:layout_constraintEnd_toEndOf="parent"
         android:id="@+id/hourlySummary"
+        android:layout_marginTop="20dp"
         />
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/hourlyPager"
@@ -45,6 +48,13 @@
         app:layout_constraintTop_toBottomOf="@+id/hourlySummary"
         app:layout_constraintBottom_toBottomOf="parent"
         />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent=".4"
+        android:orientation="vertical"
+        android:id="@+id/guideh"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

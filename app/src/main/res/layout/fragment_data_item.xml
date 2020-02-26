@@ -28,34 +28,38 @@
             android:id="@+id/itemTime"/>
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:maxHeight="20dp"
             android:maxWidth="20dp"
             android:id="@+id/iconItem"
             app:layout_constraintTop_toBottomOf="@id/itemTime"
             app:layout_constraintBottom_toTopOf="@id/itemTemperature"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/ItemSummary"
-            android:contentDescription="@string/weather_icon" />
+            app:layout_constraintEnd_toStartOf="@id/guidedi"
+            android:contentDescription="@string/weather_icon"
+            android:layout_marginBottom="10dp"
+            android:scaleType="fitXY"/>
         <TextView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:gravity="center"
-            android:textStyle="bold"
+            android:gravity="center_vertical"
+            android:textStyle="italic"
             android:text="@{itemWeather.summary}"
             app:layout_constraintTop_toBottomOf="@id/itemTime"
             app:layout_constraintBottom_toTopOf="@id/itemTemperature"
-            app:layout_constraintStart_toEndOf="@+id/iconItem"
+            app:layout_constraintStart_toEndOf="@+id/guidedi"
             app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/ItemSummary"/>
+            android:id="@+id/ItemSummary"
+            android:layout_marginBottom="10dp"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:id="@+id/itemTemperature"
             app:layout_constraintTop_toBottomOf="@id/ItemSummary"
             app:layout_constraintBottom_toTopOf="@id/itemApparent"
-            android:text="@{Double.toString(itemWeather.temperature)}"/>
+            android:text="@{Double.toString(itemWeather.temperature)}"
+            />
 
         <TextView
             android:id="@+id/itemApparentLabel"
@@ -74,7 +78,8 @@
             app:layout_constraintBottom_toTopOf="@id/itemWindSpeed"
             app:layout_constraintStart_toEndOf="@id/itemApparentLabel"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="@{Double.toString(itemWeather.apparentTemperature)}"/>
+            android:text="@{Double.toString(itemWeather.apparentTemperature)}"
+            android:gravity="end"/>
         <TextView
             android:id="@+id/itemwindSpeedLabel"
             android:layout_width="0dp"
@@ -92,7 +97,8 @@
             app:layout_constraintBottom_toTopOf="@id/itemHumidity"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/itemwindSpeedLabel"
-            app:layout_constraintTop_toBottomOf="@id/itemApparent" />
+            app:layout_constraintTop_toBottomOf="@id/itemApparent"
+            android:gravity="end"/>
         <TextView
             android:id="@+id/textView2"
             android:layout_width="0dp"
@@ -120,7 +126,8 @@
             app:layout_constraintBottom_toTopOf="@id/itemUVIndex"
             app:layout_constraintStart_toEndOf="@id/itemHumidityLabel"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="@{Double.toString(itemWeather.humidity)}"/>
+            android:text="@{Double.toString(itemWeather.humidity)}"
+            android:gravity="end"/>
         <TextView
             android:id="@+id/itemUvIndexLabel"
             android:layout_width="0dp"
@@ -139,8 +146,14 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/itemUvIndexLabel"
-            android:text="@{Integer.toString(itemWeather.uvIndex)}"/>
-
+            android:text="@{Integer.toString(itemWeather.uvIndex)}"
+            android:gravity="end"/>
+        <androidx.constraintlayout.widget.Guideline
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintGuide_percent=".4"
+            android:orientation="vertical"
+            android:id="@+id/guidedi"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

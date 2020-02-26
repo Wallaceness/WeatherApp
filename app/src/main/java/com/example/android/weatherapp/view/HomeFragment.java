@@ -241,7 +241,7 @@ public class HomeFragment extends Fragment {
             locationView.setText(addressOutput);
             // Show a toast message if an address was found.
             if (resultCode == Constants.SUCCESS_RESULT) {
-                Toast.makeText(requireContext(), getString(R.string.address_found), Toast.LENGTH_SHORT);
+                Toast.makeText(requireContext(), getString(R.string.address_found), Toast.LENGTH_SHORT).show();
             }
 
         }
