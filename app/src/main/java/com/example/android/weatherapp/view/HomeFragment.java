@@ -2,15 +2,22 @@ package com.example.android.weatherapp.view;
 
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
@@ -21,6 +28,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,7 +68,8 @@ public class HomeFragment extends Fragment {
     private String addressOutput;
     private TextView locationView;
     private Fragment currentFragment;
-
+    private MainActivity main;
+    private int notifyId = 1;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -77,6 +86,7 @@ public class HomeFragment extends Fragment {
         currentView = new CurrentFragment(currently);
         hourlyView = new HourlyFragment(hourly);
         dailyView = new DailyFragment(daily);
+        main = (MainActivity) getActivity();
 
         resultReceiver= new AddressResultReceiver(new Handler());
         locationView = rootView.findViewById(R.id.addressContainer);
@@ -146,6 +156,23 @@ public class HomeFragment extends Fragment {
             currentView.setCurrentWeather(currently);
             hourlyView.setHourlyWeather(hourly);
             dailyView.setDailyWeather(daily);
+
+            //create weather notification
+            Intent intent = new Intent(requireContext(), MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            PendingIntent pending = PendingIntent.getActivity(requireContext(), 0, intent, 0);
+
+            NotificationCompat.Builder builder= new NotificationCompat.Builder(requireContext(), "WEATHER_CHANNEL")
+                    .setSmallIcon(main.getIconId(response.getCurrently().getIcon()))
+                    .setContentTitle("CURRENT WEATHER CONDITIONS: ")
+                    .setContentText(response.getCurrently().getSummary())
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setContentIntent(pending)
+                    .setAutoCancel(true);
+
+            Notification note = builder.build();
+            NotificationManagerCompat notificationMan = NotificationManagerCompat.from(requireContext());
+            notificationMan.notify(notifyId, note);
         });
 
         vm.getErrors().observe(getViewLifecycleOwner(), new Observer<String>() {
@@ -154,24 +181,24 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show();
             }
         });
+        if (Build.VERSION.SDK_INT>=23) {
+            if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                getActivity().requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+                // TODO: Consider calling
+                //    Activity#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for Activity#requestPermissions for more details.
+            } else {
+                locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 900000, 1000, mLocationListener);
+                loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                startIntentService();
+    //            updateUI();
 
-        if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            getActivity().requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-            // TODO: Consider calling
-            //    Activity#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for Activity#requestPermissions for more details.
-        }
-        else {
-            locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 900000, 1000, mLocationListener);
-            loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            startIntentService();
-//            updateUI();
-
-            vm.fetchWeather(Double.toString(loc.getLatitude())+","+Double.toString(loc.getLongitude()));
+                vm.fetchWeather(Double.toString(loc.getLatitude()) + "," + Double.toString(loc.getLongitude()));
+            }
         }
 
         return rootView;

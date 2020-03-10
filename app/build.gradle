@@ -65,4 +65,9 @@ dependencies {
     //viewpager2
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
+    implementation "com.android.support:support-compat:28.0.0"
+
+    //workmanager
+    implementation "androidx.work:work-runtime:2.3.3"
+
 }

@@ -62,7 +62,7 @@ public class DailyFragment extends Fragment {
         this.daily=day;
         binder.setDailyWeather(day);
         weather = (ArrayList<DataItem>)day.getData();
-        main.renderIcon(day.getIcon(), icon);
+        icon.setBackground(main.renderIcon(day.getIcon()));
         pagerAdapter.updateWeather(weather);
 
     }

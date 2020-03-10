@@ -50,7 +50,7 @@ public class DataItemFragment extends Fragment {
     public void setCurrentWeather(DataItem item){
         this.weatherItem = item;
         binder.setItemWeather(item);
-        main.renderIcon(item.getIcon(), icon);
+        icon.setBackground(main.renderIcon(item.getIcon()));
     }
 
 }

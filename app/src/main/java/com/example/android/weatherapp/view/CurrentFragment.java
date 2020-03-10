@@ -48,7 +48,7 @@ public class CurrentFragment extends Fragment {
 
     public void setCurrentWeather(Currently currently){
         this.currentWeather=currently;
-        main.renderIcon(currently.getIcon(), icon);
+        icon.setBackground(main.renderIcon(currently.getIcon()));
         binder.setCurrentWeather(currentWeather);
     }
 }
