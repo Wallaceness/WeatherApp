@@ -28,7 +28,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,9 +40,6 @@ import com.example.android.weatherapp.model.Hourly;
 import com.example.android.weatherapp.model.Minutely;
 import com.example.android.weatherapp.viewmodel.WeatherViewModel;
 import com.google.android.material.tabs.TabLayout;
-
-import java.security.Permission;
-import java.util.List;
 
 
 /**
@@ -69,7 +65,6 @@ public class HomeFragment extends Fragment {
     private TextView locationView;
     private Fragment currentFragment;
     private MainActivity main;
-    private int notifyId = 1;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -156,23 +151,6 @@ public class HomeFragment extends Fragment {
             currentView.setCurrentWeather(currently);
             hourlyView.setHourlyWeather(hourly);
             dailyView.setDailyWeather(daily);
-
-            //create weather notification
-            Intent intent = new Intent(requireContext(), MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            PendingIntent pending = PendingIntent.getActivity(requireContext(), 0, intent, 0);
-
-            NotificationCompat.Builder builder= new NotificationCompat.Builder(requireContext(), "WEATHER_CHANNEL")
-                    .setSmallIcon(main.getIconId(response.getCurrently().getIcon()))
-                    .setContentTitle("CURRENT WEATHER CONDITIONS: ")
-                    .setContentText(response.getCurrently().getSummary())
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .setContentIntent(pending)
-                    .setAutoCancel(true);
-
-            Notification note = builder.build();
-            NotificationManagerCompat notificationMan = NotificationManagerCompat.from(requireContext());
-            notificationMan.notify(notifyId, note);
         });
 
         vm.getErrors().observe(getViewLifecycleOwner(), new Observer<String>() {
@@ -200,6 +178,9 @@ public class HomeFragment extends Fragment {
                 vm.fetchWeather(Double.toString(loc.getLatitude()) + "," + Double.toString(loc.getLongitude()));
             }
         }
+
+        //start a periodic task to fetch weather data
+        vm.observableWeatherFetch(loc.getLatitude()+","+loc.getLongitude());
 
         return rootView;
 
@@ -268,7 +249,7 @@ public class HomeFragment extends Fragment {
             locationView.setText(addressOutput);
             // Show a toast message if an address was found.
             if (resultCode == Constants.SUCCESS_RESULT) {
-                Toast.makeText(requireContext(), getString(R.string.address_found), Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onReceiveResult: ");
             }
 
         }

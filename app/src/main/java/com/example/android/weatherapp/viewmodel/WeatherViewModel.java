@@ -1,15 +1,22 @@
 package com.example.android.weatherapp.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.work.Data;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.example.android.weatherapp.model.Response;
 import com.example.android.weatherapp.repository.APIKey;
 import com.example.android.weatherapp.repository.Repository;
+
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -20,7 +27,7 @@ import io.reactivex.schedulers.Schedulers;
 public class WeatherViewModel extends AndroidViewModel {
     private MutableLiveData<Response> Weather= new MutableLiveData<Response>();
     private MutableLiveData<String> errors = new MutableLiveData<String>();
-
+    private static final String TAG = "WeatherViewModel";
 
     public WeatherViewModel(@NonNull Application application) {
         super(application);
@@ -61,5 +68,22 @@ public class WeatherViewModel extends AndroidViewModel {
 
     public LiveData<String> getErrors() {
         return errors;
+    }
+
+    public Disposable observableWeatherFetch(String location){
+        Data.Builder data = new Data.Builder();
+        data.putString("Location", location);
+        PeriodicWorkRequest fetch = new PeriodicWorkRequest.Builder(ApiWorker.class, 5, TimeUnit.MINUTES).setInputData(data.build()).build();
+        WorkManager.getInstance(getApplication()).enqueue(fetch);
+        return Observable.interval(5, 5, TimeUnit.MINUTES, Schedulers.io())
+                .map(tick-> {
+                    Log.d(TAG, "observableWeatherFetch: ");
+                    this.fetchWeather(location);
+                return 1;})
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(it->{
+            Log.d("IntervalExample", it.toString());
+
+        });
     }
 }

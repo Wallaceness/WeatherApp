@@ -5,6 +5,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavHost;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.work.Data;
+import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
@@ -35,8 +37,6 @@ public class MainActivity extends AppCompatActivity {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(weatherChannel);
         }
-        PeriodicWorkRequest fetch = new PeriodicWorkRequest.Builder(ApiWorker.class, 5000, TimeUnit.MINUTES).build();
-        WorkManager.getInstance(this).enqueue(fetch);
     }
 
     public void navigateTo(int id){
@@ -70,32 +70,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public int getIconId(String name){
-        switch(name){
-            case "clear-day":
-                return R.drawable.sun;
-            case "clear-night":
-                return R.drawable.moon;
-            case "rain":
-                return R.drawable.rain;
-            case "snow":
-                return R.drawable.snow;
-            case "sleet":
-                return R.drawable.sleet;
-            case "wind":
-                return R.drawable.windy;
-            case "fog":
-                return R.drawable.foggy;
-            case "cloudy":
-                return R.drawable.clouds;
-            case "partly-cloudy-day":
-                return R.drawable.partly_cloudy;
-            case "partly-cloudy-night":
-                return R.drawable.moon_cloudy;
-            default:
-                return R.drawable.ic_launcher_foreground;
-        }
-    }
+
 
     private void startWeatherTask(){
 
