@@ -65,6 +65,7 @@ public class HomeFragment extends Fragment {
     private TextView locationView;
     private Fragment currentFragment;
     private MainActivity main;
+    private boolean permissionGranted=false;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -174,16 +175,27 @@ public class HomeFragment extends Fragment {
                 loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 startIntentService();
     //            updateUI();
+                permissionGranted = true;
 
-                vm.fetchWeather(Double.toString(loc.getLatitude()) + "," + Double.toString(loc.getLongitude()));
             }
         }
-
-        //start a periodic task to fetch weather data
-        vm.observableWeatherFetch(loc.getLatitude()+","+loc.getLongitude());
-
         return rootView;
 
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        vm.cancelInterval();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //start a periodic task to fetch weather data
+        if (permissionGranted){
+            vm.observableWeatherFetch(loc.getLatitude()+","+loc.getLongitude());
+        }
     }
 
     private final LocationListener mLocationListener = new LocationListener() {

@@ -56,7 +56,7 @@ public class ApiWorker extends Worker {
                         NotificationCompat.Builder builder= new NotificationCompat.Builder(getApplicationContext(), "WEATHER_CHANNEL")
                                 .setSmallIcon(getIconId(currently.getIcon()))
                                 .setContentTitle("Current Weather Conditions: ")
-                                .setContentText(currently.getSummary()+", "+currently.getTemperature()+"Degrees")
+                                .setContentText(currently.getSummary()+", "+currently.getTemperature()+" Degrees")
                                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                                 .setContentIntent(pending)
                                 .setAutoCancel(true);

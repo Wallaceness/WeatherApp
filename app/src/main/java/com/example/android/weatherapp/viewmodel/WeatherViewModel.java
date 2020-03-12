@@ -15,7 +15,6 @@ import androidx.work.WorkManager;
 import com.example.android.weatherapp.model.Response;
 import com.example.android.weatherapp.repository.APIKey;
 import com.example.android.weatherapp.repository.Repository;
-
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -28,6 +27,7 @@ public class WeatherViewModel extends AndroidViewModel {
     private MutableLiveData<Response> Weather= new MutableLiveData<Response>();
     private MutableLiveData<String> errors = new MutableLiveData<String>();
     private static final String TAG = "WeatherViewModel";
+    private Disposable subscriber;
 
     public WeatherViewModel(@NonNull Application application) {
         super(application);
@@ -70,12 +70,12 @@ public class WeatherViewModel extends AndroidViewModel {
         return errors;
     }
 
-    public Disposable observableWeatherFetch(String location){
+    public void observableWeatherFetch(String location){
         Data.Builder data = new Data.Builder();
         data.putString("Location", location);
-        PeriodicWorkRequest fetch = new PeriodicWorkRequest.Builder(ApiWorker.class, 5, TimeUnit.MINUTES).setInputData(data.build()).build();
-        WorkManager.getInstance(getApplication()).enqueue(fetch);
-        return Observable.interval(5, 5, TimeUnit.MINUTES, Schedulers.io())
+        PeriodicWorkRequest fetch = new PeriodicWorkRequest.Builder(ApiWorker.class, PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS, TimeUnit.MILLISECONDS).setInputData(data.build()).build();
+        WorkManager.getInstance(getApplication()).enqueueUniquePeriodicWork("WEATHER_NOTIFICATIONS",ExistingPeriodicWorkPolicy.KEEP,fetch);
+        subscriber = Observable.interval(0, 5, TimeUnit.MINUTES, Schedulers.io())
                 .map(tick-> {
                     Log.d(TAG, "observableWeatherFetch: ");
                     this.fetchWeather(location);
@@ -85,5 +85,11 @@ public class WeatherViewModel extends AndroidViewModel {
             Log.d("IntervalExample", it.toString());
 
         });
+    }
+
+    public void cancelInterval(){
+        if (subscriber!=null && !subscriber.isDisposed()){
+            subscriber.dispose();
+        }
     }
 }
