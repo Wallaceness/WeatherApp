@@ -7,14 +7,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/colorPrimaryDark">
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/addressContainer"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/tabContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/autocomplete_fragment"
         android:textSize="12pt"
         android:textStyle="bold"
         android:gravity="center"
+        />
+    <fragment
+        android:id="@+id/autocomplete_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tabContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/addressContainer"
         />
 
     <com.google.android.material.tabs.TabLayout

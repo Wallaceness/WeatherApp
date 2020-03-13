@@ -39,7 +39,13 @@ import com.example.android.weatherapp.model.Daily;
 import com.example.android.weatherapp.model.Hourly;
 import com.example.android.weatherapp.model.Minutely;
 import com.example.android.weatherapp.viewmodel.WeatherViewModel;
+import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.tabs.TabLayout;
+
+import java.util.Arrays;
 
 
 /**
@@ -66,6 +72,7 @@ public class HomeFragment extends Fragment {
     private Fragment currentFragment;
     private MainActivity main;
     private boolean permissionGranted=false;
+    String location;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -75,6 +82,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        location = HomeFragmentArgs.fromBundle(getArguments()).getLocation();
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
         vm = new WeatherViewModel(getActivity().getApplication());
         locManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -179,6 +187,29 @@ public class HomeFragment extends Fragment {
 
             }
         }
+
+        //Initialize the AutocompleteSupportFragment.
+        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+                getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+
+// Specify the types of place data to return.
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
+
+// Set up a PlaceSelectionListener to handle the response.
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                Log.i(TAG, "Place: " + place.getName() + ", " + place.getLatLng());
+                main.navigateTo(place.getLatLng().latitude+","+place.getLatLng().longitude);
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
         return rootView;
 
     }
@@ -194,7 +225,12 @@ public class HomeFragment extends Fragment {
         super.onResume();
         //start a periodic task to fetch weather data
         if (permissionGranted){
-            vm.observableWeatherFetch(loc.getLatitude()+","+loc.getLongitude());
+            if (location==null){
+                vm.observableWeatherFetch(loc.getLatitude()+","+loc.getLongitude());
+            }
+            else{
+                vm.observableWeatherFetch(location);
+            }
         }
     }
 

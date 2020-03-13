@@ -75,7 +75,7 @@ public class WeatherViewModel extends AndroidViewModel {
         data.putString("Location", location);
         PeriodicWorkRequest fetch = new PeriodicWorkRequest.Builder(ApiWorker.class, PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS, TimeUnit.MILLISECONDS).setInputData(data.build()).build();
         WorkManager.getInstance(getApplication()).enqueueUniquePeriodicWork("WEATHER_NOTIFICATIONS",ExistingPeriodicWorkPolicy.KEEP,fetch);
-        subscriber = Observable.interval(0, 5, TimeUnit.MINUTES, Schedulers.io())
+        subscriber = Observable.interval(0, 1, TimeUnit.MINUTES, Schedulers.io())
                 .map(tick-> {
                     Log.d(TAG, "observableWeatherFetch: ");
                     this.fetchWeather(location);

@@ -16,4 +16,6 @@
     <string name="hi">Hi</string>
     <string name="low">Low</string>
     <string name="fetch_other_location">Fetch other location..</string>
+    <string name="switch_locations">Switch Locations</string>
+    <string name="places_api_key">AIzaSyAJOXlfwb80iKOyrMbhE4MYo7yiMzKHa7Q</string>
 </resources>
