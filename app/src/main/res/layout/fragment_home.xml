@@ -27,6 +27,7 @@
         app:layout_constraintBottom_toTopOf="@+id/tabContainer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/addressContainer"
+
         />
 
     <com.google.android.material.tabs.TabLayout

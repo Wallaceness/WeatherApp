@@ -6,12 +6,12 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.ResultReceiver;
-import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+
+import com.google.android.libraries.places.api.model.Place;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -59,17 +59,26 @@ public class FetchAddressIntentService extends IntentService {
         // Get the location passed to this service through an extra.
         Location location = intent.getParcelableExtra(
                 Constants.LOCATION_DATA_EXTRA);
+        Place place = intent.getParcelableExtra(Constants.PLACE_DATA_EXTRA);
 
         // ...
-
         List<Address> addresses = null;
 
         try {
-            addresses = geocoder.getFromLocation(
-                    location.getLatitude(),
-                    location.getLongitude(),
-                    // In this sample, get just a single address.
-                    1);
+            if (location!=null) {
+                addresses = geocoder.getFromLocation(
+                        location.getLatitude(),
+                        location.getLongitude(),
+                        // In this sample, get just a single address.
+                        1);
+            }
+            else if (place!=null){
+                addresses= geocoder.getFromLocation(
+                        place.getLatLng().latitude,
+                        place.getLatLng().longitude,
+                        1
+                );
+            }
         } catch (IOException ioException) {
             // Catch network or other I/O problems.
             errorMessage = getString(R.string.service_not_available);

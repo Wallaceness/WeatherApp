@@ -11,14 +11,16 @@
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <argument android:name="location"
-            app:argType="string"
-            android:defaultValue="none"/>
+            app:argType="com.google.android.libraries.places.api.model.Place"
+            android:defaultValue="@null"
+            app:nullable="true"/>
         <action
             android:id="@+id/action_homeFragment_self"
             app:destination="@id/homeFragment" >
             <argument android:name="location"
-                app:argType="string"
-                android:defaultValue="none"/>
+                app:argType="com.google.android.libraries.places.api.model.Place"
+                android:defaultValue="@null"
+                app:nullable="true" />
         </action>
     </fragment>
 </navigation>

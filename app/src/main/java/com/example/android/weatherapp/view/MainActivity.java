@@ -20,7 +20,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.example.android.weatherapp.Constants;
 import com.example.android.weatherapp.R;
+import com.example.android.weatherapp.repository.APIKey;
 import com.example.android.weatherapp.viewmodel.ApiWorker;
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.Places;
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
             notificationManager.createNotificationChannel(weatherChannel);
         }
         if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), getString(R.string.places_api_key), Locale.US);
+            Places.initialize(getApplicationContext(), APIKey.googleCloudKey, Locale.US);
         }
     }
 
@@ -60,20 +62,15 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.action_menu, menu);
-        MenuItem search = menu.findItem(R.id.searchbar);
-//        SearchView searchView = (SearchView) search.getActionView();
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id= item.getItemId();
-        if (id == R.id.searchbar) {
-        }
         return super.onOptionsItemSelected(item);
     }
 
-    public void navigateTo(String place){
+    public void navigateTo(Place place){
         HomeFragmentDirections.ActionHomeFragmentSelf action = HomeFragmentDirections.actionHomeFragmentSelf();
         action.setLocation(place);
         NavHostFragment.findNavController(NavHost).navigate(action);

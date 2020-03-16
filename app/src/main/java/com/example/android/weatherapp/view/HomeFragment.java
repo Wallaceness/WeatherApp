@@ -9,6 +9,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -72,7 +73,7 @@ public class HomeFragment extends Fragment {
     private Fragment currentFragment;
     private MainActivity main;
     private boolean permissionGranted=false;
-    String location;
+    Place location;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -157,9 +158,9 @@ public class HomeFragment extends Fragment {
             minutely = response.getMinutely();
             currently = response.getCurrently();
             daily = response.getDaily();
-            currentView.setCurrentWeather(currently);
-            hourlyView.setHourlyWeather(hourly);
-            dailyView.setDailyWeather(daily);
+            currentView.setCurrentWeather(currently, response.getTimezone());
+            hourlyView.setHourlyWeather(hourly, response.getTimezone());
+            dailyView.setDailyWeather(daily, response.getTimezone());
         });
 
         vm.getErrors().observe(getViewLifecycleOwner(), new Observer<String>() {
@@ -193,15 +194,15 @@ public class HomeFragment extends Fragment {
                 getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
 // Specify the types of place data to return.
-        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS));
 
 // Set up a PlaceSelectionListener to handle the response.
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
                 // TODO: Get info about the selected place.
-                Log.i(TAG, "Place: " + place.getName() + ", " + place.getLatLng());
-                main.navigateTo(place.getLatLng().latitude+","+place.getLatLng().longitude);
+                Log.i(TAG, "Place: " + place.getName() + ", " + place.getLatLng()+" "+place.getAddress());
+                main.navigateTo(place);
             }
 
             @Override
@@ -229,7 +230,7 @@ public class HomeFragment extends Fragment {
                 vm.observableWeatherFetch(loc.getLatitude()+","+loc.getLongitude());
             }
             else{
-                vm.observableWeatherFetch(location);
+                vm.observableWeatherFetch(location.getLatLng().latitude+","+location.getLatLng().longitude);
             }
         }
     }
@@ -272,7 +273,12 @@ public class HomeFragment extends Fragment {
     protected void startIntentService() {
         Intent intent = new Intent(getActivity(), FetchAddressIntentService.class);
         intent.putExtra(Constants.RECEIVER, resultReceiver);
-        intent.putExtra(Constants.LOCATION_DATA_EXTRA, loc);
+        if (location==null){
+            intent.putExtra(Constants.LOCATION_DATA_EXTRA, loc);
+        }
+        else{
+            intent.putExtra(Constants.PLACE_DATA_EXTRA, location);
+        }
         getActivity().startService(intent);
     }
 
@@ -302,6 +308,4 @@ public class HomeFragment extends Fragment {
 
         }
     }
-
-
 }

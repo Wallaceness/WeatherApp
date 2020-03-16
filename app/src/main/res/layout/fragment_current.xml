@@ -5,6 +5,8 @@
     <data>
         <variable name="currentWeather"
             type="com.example.android.weatherapp.model.Currently" />
+        <variable name="timezone"
+            type="String" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -21,7 +23,7 @@
             android:textSize="12pt"
             android:gravity="center"
             android:textStyle="bold"
-            android:text="@{currentWeather.formatDate(currentWeather.time)}"
+            android:text="@{currentWeather.formatDate(currentWeather.time, timezone)}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/currentSummary"
             android:id="@+id/currentTime" />

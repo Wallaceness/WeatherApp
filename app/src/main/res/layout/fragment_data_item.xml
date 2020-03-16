@@ -8,6 +8,9 @@
             type="com.example.android.weatherapp.model.DataItem" />
         <variable name="itemType"
             type="String" />
+        <variable
+            name="timezone"
+            type="String" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -23,7 +26,7 @@
             android:textSize="12pt"
             android:gravity="center"
             android:textStyle="bold"
-            android:text="@{itemWeather.formatDate(itemWeather.time, itemType)}"
+            android:text="@{itemWeather.formatDate(itemWeather.time, itemType, timezone)}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/ItemSummary"
             android:id="@+id/itemTime"/>
