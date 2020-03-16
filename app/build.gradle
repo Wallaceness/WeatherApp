@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'androidx.navigation.safeargs'
+
 
 android {
     dataBinding {
@@ -70,4 +72,6 @@ dependencies {
     //workmanager
     implementation "androidx.work:work-runtime:2.3.3"
 
+    //places api
+    implementation 'com.google.android.libraries.places:places:2.2.0'
 }

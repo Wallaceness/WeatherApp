@@ -29,6 +29,7 @@ public class HourlyFragment extends Fragment {
     ArrayList<DataItem> weather = new ArrayList<DataItem>();
     ImageView icon;
     MainActivity main;
+    String Timezone;
 
     private OnFragmentInteractionListener mListener;
 
@@ -69,10 +70,10 @@ public class HourlyFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public void setHourlyWeather(Hourly hours){
+    public void setHourlyWeather(Hourly hours, String timezone){
         this.hourly = hours;
         binder.setHourlyforecast(hours);
         icon.setBackground(main.renderIcon(hourly.getIcon()));
-        pagerAdapter.updateWeather(hourly.getData());
+        pagerAdapter.updateWeather(hourly.getData(), timezone);
     }
 }

@@ -16,6 +16,8 @@ import com.example.android.weatherapp.databinding.FragmentDataItemBinding;
 import com.example.android.weatherapp.model.Currently;
 import com.example.android.weatherapp.model.DataItem;
 
+import java.sql.Time;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,13 +26,15 @@ public class DataItemFragment extends Fragment {
     private DataItem weatherItem;
     private FragmentDataItemBinding binder;
     private String type;
+    private String Timezone;
     MainActivity main;
     ImageView icon;
 
 
-    public DataItemFragment(DataItem item, String type) {
+    public DataItemFragment(DataItem item, String type, String timezone) {
         this.weatherItem = item;
         this.type=type;
+        this.Timezone = timezone;
     }
 
 
@@ -40,6 +44,7 @@ public class DataItemFragment extends Fragment {
 
         binder = DataBindingUtil.inflate(inflater, R.layout.fragment_data_item, container, false);
         binder.setItemType(type);
+        binder.setTimezone(Timezone);
         View rootView = binder.getRoot();
         icon = rootView.findViewById(R.id.iconItem);
         main=(MainActivity) getActivity();

@@ -9,6 +9,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -28,7 +29,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,10 +40,13 @@ import com.example.android.weatherapp.model.Daily;
 import com.example.android.weatherapp.model.Hourly;
 import com.example.android.weatherapp.model.Minutely;
 import com.example.android.weatherapp.viewmodel.WeatherViewModel;
+import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.tabs.TabLayout;
 
-import java.security.Permission;
-import java.util.List;
+import java.util.Arrays;
 
 
 /**
@@ -69,7 +72,8 @@ public class HomeFragment extends Fragment {
     private TextView locationView;
     private Fragment currentFragment;
     private MainActivity main;
-    private int notifyId = 1;
+    private boolean permissionGranted=false;
+    Place location;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -79,6 +83,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        location = HomeFragmentArgs.fromBundle(getArguments()).getLocation();
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
         vm = new WeatherViewModel(getActivity().getApplication());
         locManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -153,26 +158,9 @@ public class HomeFragment extends Fragment {
             minutely = response.getMinutely();
             currently = response.getCurrently();
             daily = response.getDaily();
-            currentView.setCurrentWeather(currently);
-            hourlyView.setHourlyWeather(hourly);
-            dailyView.setDailyWeather(daily);
-
-            //create weather notification
-            Intent intent = new Intent(requireContext(), MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            PendingIntent pending = PendingIntent.getActivity(requireContext(), 0, intent, 0);
-
-            NotificationCompat.Builder builder= new NotificationCompat.Builder(requireContext(), "WEATHER_CHANNEL")
-                    .setSmallIcon(main.getIconId(response.getCurrently().getIcon()))
-                    .setContentTitle("CURRENT WEATHER CONDITIONS: ")
-                    .setContentText(response.getCurrently().getSummary())
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .setContentIntent(pending)
-                    .setAutoCancel(true);
-
-            Notification note = builder.build();
-            NotificationManagerCompat notificationMan = NotificationManagerCompat.from(requireContext());
-            notificationMan.notify(notifyId, note);
+            currentView.setCurrentWeather(currently, response.getTimezone());
+            hourlyView.setHourlyWeather(hourly, response.getTimezone());
+            dailyView.setDailyWeather(daily, response.getTimezone());
         });
 
         vm.getErrors().observe(getViewLifecycleOwner(), new Observer<String>() {
@@ -196,13 +184,55 @@ public class HomeFragment extends Fragment {
                 loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 startIntentService();
     //            updateUI();
+                permissionGranted = true;
 
-                vm.fetchWeather(Double.toString(loc.getLatitude()) + "," + Double.toString(loc.getLongitude()));
             }
         }
 
+        //Initialize the AutocompleteSupportFragment.
+        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+                getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+
+// Specify the types of place data to return.
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS));
+
+// Set up a PlaceSelectionListener to handle the response.
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                Log.i(TAG, "Place: " + place.getName() + ", " + place.getLatLng()+" "+place.getAddress());
+                main.navigateTo(place);
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
         return rootView;
 
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        vm.cancelInterval();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //start a periodic task to fetch weather data
+        if (permissionGranted){
+            if (location==null){
+                vm.observableWeatherFetch(loc.getLatitude()+","+loc.getLongitude());
+            }
+            else{
+                vm.observableWeatherFetch(location.getLatLng().latitude+","+location.getLatLng().longitude);
+            }
+        }
     }
 
     private final LocationListener mLocationListener = new LocationListener() {
@@ -243,7 +273,12 @@ public class HomeFragment extends Fragment {
     protected void startIntentService() {
         Intent intent = new Intent(getActivity(), FetchAddressIntentService.class);
         intent.putExtra(Constants.RECEIVER, resultReceiver);
-        intent.putExtra(Constants.LOCATION_DATA_EXTRA, loc);
+        if (location==null){
+            intent.putExtra(Constants.LOCATION_DATA_EXTRA, loc);
+        }
+        else{
+            intent.putExtra(Constants.PLACE_DATA_EXTRA, location);
+        }
         getActivity().startService(intent);
     }
 
@@ -268,11 +303,9 @@ public class HomeFragment extends Fragment {
             locationView.setText(addressOutput);
             // Show a toast message if an address was found.
             if (resultCode == Constants.SUCCESS_RESULT) {
-                Toast.makeText(requireContext(), getString(R.string.address_found), Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onReceiveResult: ");
             }
 
         }
     }
-
-
 }

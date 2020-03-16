@@ -46,9 +46,10 @@ public class CurrentFragment extends Fragment {
         return rootView;
     }
 
-    public void setCurrentWeather(Currently currently){
+    public void setCurrentWeather(Currently currently, String timezone){
         this.currentWeather=currently;
         icon.setBackground(main.renderIcon(currently.getIcon()));
         binder.setCurrentWeather(currentWeather);
+        binder.setTimezone(timezone);
     }
 }

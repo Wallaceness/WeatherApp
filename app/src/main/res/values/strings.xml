@@ -15,4 +15,7 @@
     <string name="chance_of_precipitation">Chance of Precipitation:</string>
     <string name="hi">Hi</string>
     <string name="low">Low</string>
+    <string name="fetch_other_location">Fetch other location..</string>
+    <string name="switch_locations">Switch Locations</string>
+    <string name="dark_sky">Powered by Dark Sky</string>
 </resources>

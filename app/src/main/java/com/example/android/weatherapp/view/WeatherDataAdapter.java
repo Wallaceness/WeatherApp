@@ -12,6 +12,7 @@ public class WeatherDataAdapter extends FragmentStateAdapter {
 
     private List<DataItem> weatherList;
     private String type;
+    private String timezone;
 
     public WeatherDataAdapter(Fragment fragment, List<DataItem> weather, String type) {
         super(fragment);
@@ -19,15 +20,16 @@ public class WeatherDataAdapter extends FragmentStateAdapter {
         this.type=type;
     }
 
-    public void updateWeather(List<DataItem> weatherList){
+    public void updateWeather(List<DataItem> weatherList, String Timezone){
         this.weatherList = weatherList;
+        this.timezone = Timezone;
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        DataItemFragment dataI = new DataItemFragment(weatherList.get(position), type);
+        DataItemFragment dataI = new DataItemFragment(weatherList.get(position), type, timezone);
         return dataI;
     }
 

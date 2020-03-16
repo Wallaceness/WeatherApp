@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class Currently{
 
@@ -217,9 +218,11 @@ public class Currently{
 		return uvIndex;
 	}
 
-    public String formatDate(long date){
+    public String formatDate(long date, String timezone){
         Date da = new Date(date*1000);
+        TimeZone tz = TimeZone.getTimeZone(timezone);
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, YYYY HH:mm a", Locale.getDefault());
+        dateFormat.setTimeZone(tz);
         String format = dateFormat.format(da);
         return format;
     }

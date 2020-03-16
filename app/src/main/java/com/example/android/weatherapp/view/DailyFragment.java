@@ -58,13 +58,12 @@ public class DailyFragment extends Fragment {
         return rootView;
     }
 
-    public void setDailyWeather(Daily day){
+    public void setDailyWeather(Daily day, String timezone){
         this.daily=day;
         binder.setDailyWeather(day);
         weather = (ArrayList<DataItem>)day.getData();
         icon.setBackground(main.renderIcon(day.getIcon()));
-        pagerAdapter.updateWeather(weather);
-
+        pagerAdapter.updateWeather(weather, timezone);
     }
 
 }

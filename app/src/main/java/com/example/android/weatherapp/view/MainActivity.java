@@ -1,28 +1,46 @@
 package com.example.android.weatherapp.view;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.FragmentManager;
-import androidx.navigation.NavHost;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 
+import com.example.android.weatherapp.Constants;
 import com.example.android.weatherapp.R;
+import com.example.android.weatherapp.repository.APIKey;
 import com.example.android.weatherapp.viewmodel.ApiWorker;
+import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
     private NavHostFragment NavHost;
     private FragmentManager boss;
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +53,27 @@ public class MainActivity extends AppCompatActivity {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(weatherChannel);
         }
-        PeriodicWorkRequest fetch = new PeriodicWorkRequest.Builder(ApiWorker.class, 5000, TimeUnit.MINUTES).build();
-        WorkManager.getInstance(this).enqueue(fetch);
+        if (!Places.isInitialized()) {
+            Places.initialize(getApplicationContext(), APIKey.googleCloudKey, Locale.US);
+        }
     }
 
-    public void navigateTo(int id){
-        NavHostFragment.findNavController(NavHost).navigate(id);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void navigateTo(Place place){
+        HomeFragmentDirections.ActionHomeFragmentSelf action = HomeFragmentDirections.actionHomeFragmentSelf();
+        action.setLocation(place);
+        NavHostFragment.findNavController(NavHost).navigate(action);
     }
 
     public Drawable renderIcon(String name){
@@ -70,35 +103,5 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public int getIconId(String name){
-        switch(name){
-            case "clear-day":
-                return R.drawable.sun;
-            case "clear-night":
-                return R.drawable.moon;
-            case "rain":
-                return R.drawable.rain;
-            case "snow":
-                return R.drawable.snow;
-            case "sleet":
-                return R.drawable.sleet;
-            case "wind":
-                return R.drawable.windy;
-            case "fog":
-                return R.drawable.foggy;
-            case "cloudy":
-                return R.drawable.clouds;
-            case "partly-cloudy-day":
-                return R.drawable.partly_cloudy;
-            case "partly-cloudy-night":
-                return R.drawable.moon_cloudy;
-            default:
-                return R.drawable.ic_launcher_foreground;
-        }
-    }
-
-    private void startWeatherTask(){
-
-    }
 }
 

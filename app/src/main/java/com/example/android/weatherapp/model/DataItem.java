@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class DataItem{
 	@SerializedName("summary")
@@ -282,15 +283,18 @@ public class DataItem{
 		return uvIndex;
 	}
 
-	public String formatDate(long date, String itemType){
+	public String formatDate(long date, String itemType, String timezone){
 		Date da = new Date(date*1000);
 		String format="";
+		TimeZone tz = TimeZone.getTimeZone(timezone);
 		if (itemType.equals("hourly")){
 			SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, YYYY hh:mm a", Locale.getDefault());
+			dateFormat.setTimeZone(tz);
 			format = dateFormat.format(da);
 		}
 		else if (itemType.equals("daily")){
 			SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, YYYY", Locale.getDefault());
+			dateFormat.setTimeZone(tz);
 			format = dateFormat.format(da);
 		}
 		return format;
