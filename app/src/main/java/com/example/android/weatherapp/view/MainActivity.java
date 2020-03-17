@@ -10,6 +10,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -67,6 +68,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id==R.id.darkSky){
+            Uri url = Uri.parse("https://darksky.net/dev");
+            Intent redirect = new Intent(Intent.ACTION_VIEW, url);
+            if(redirect.resolveActivity(getPackageManager())!=null){
+                startActivity(redirect);
+            } else {
+                Log.d("Dark Sky Link", "Can't handle this!");
+            }
+        }
         return super.onOptionsItemSelected(item);
     }
 
