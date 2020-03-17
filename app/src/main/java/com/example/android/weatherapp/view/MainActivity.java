@@ -76,6 +76,10 @@ public class MainActivity extends AppCompatActivity {
         NavHostFragment.findNavController(NavHost).navigate(action);
     }
 
+    public void navigateTo(){
+        NavHostFragment.findNavController(NavHost).navigate(R.id.homeFragment);
+    }
+
     public Drawable renderIcon(String name){
         switch(name){
             case "clear-day":

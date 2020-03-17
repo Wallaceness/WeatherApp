@@ -29,6 +29,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,7 +74,8 @@ public class HomeFragment extends Fragment {
     private Fragment currentFragment;
     private MainActivity main;
     private boolean permissionGranted=false;
-    Place location;
+    private Place location;
+    private Button backButton;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -95,6 +97,7 @@ public class HomeFragment extends Fragment {
 
         resultReceiver= new AddressResultReceiver(new Handler());
         locationView = rootView.findViewById(R.id.addressContainer);
+        backButton = rootView.findViewById(R.id.backToLocation);
 
         tabView = rootView.findViewById(R.id.tabContainer);
         tabView.addTab(tabView.newTab().setText("Now"));
@@ -152,6 +155,13 @@ public class HomeFragment extends Fragment {
         manager.beginTransaction().add(R.id.fragContainer, dailyView).hide(dailyView).commit();
         currentFragment = currentView;
 
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                main.navigateTo();
+            }
+        });
+
         //set up your observers here.
         vm.getWeather().observe(getViewLifecycleOwner(), response -> {
             hourly = response.getHourly();
@@ -172,7 +182,6 @@ public class HomeFragment extends Fragment {
         if (Build.VERSION.SDK_INT>=23) {
             if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 getActivity().requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-                // TODO: Consider calling
                 //    Activity#requestPermissions
                 // here to request the missing permissions, and then overriding
                 //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -183,7 +192,6 @@ public class HomeFragment extends Fragment {
                 locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 900000, 1000, mLocationListener);
                 loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 startIntentService();
-    //            updateUI();
                 permissionGranted = true;
 
             }
@@ -238,7 +246,9 @@ public class HomeFragment extends Fragment {
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(final Location location) {
-            vm.fetchWeather(Double.toString(location.getLatitude())+","+Double.toString(location.getLongitude()));
+            if (location == null){
+                vm.fetchWeather(Double.toString(location.getLatitude())+","+Double.toString(location.getLongitude()));
+            }
         }
 
         @Override

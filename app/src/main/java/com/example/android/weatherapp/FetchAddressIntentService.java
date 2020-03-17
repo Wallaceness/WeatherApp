@@ -101,10 +101,13 @@ public class FetchAddressIntentService extends IntentService {
             deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage);
         } else {
             Address address = addresses.get(0);
-            String parsedLocation = address.getLocality()+", "+address.getAdminArea()+" "+address.getPostalCode();
+            String postal = address.getPostalCode();
+            String parsedLocation = address.getLocality()+", "+address.getAdminArea()+" ";
+            if (postal!=null) {
+                parsedLocation+=postal;
+            }
             Log.i(TAG, getString(R.string.address_found));
             deliverResultToReceiver(Constants.SUCCESS_RESULT, parsedLocation);
         }
-
     }
 }
